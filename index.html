@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>For My Lizzu ❤️</title>
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <style>
+        :root { --main-pink: #ffafcc; --deep-pink: #ff0a54; }
+        body {
+            background-color: var(--main-pink);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+            overflow: hidden;
+            transition: background 1s ease;
+        }
+
+        #card {
+            background: white;
+            padding: 40px;
+            border-radius: 40px;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.1);
+            text-align: center;
+            max-width: 420px;
+            width: 90%;
+            z-index: 100;
+        }
+
+        h1 { color: var(--deep-pink); margin-bottom: 10px; }
+        .emoji-stage { font-size: 90px; margin: 20px 0; }
+        
+        #compliment { font-size: 1.2rem; color: #ff477e; height: 30px; font-weight: bold; }
+
+        .btn-box { display: flex; gap: 20px; justify-content: center; margin-top: 30px; }
+        
+        button {
+            padding: 18px 35px;
+            border: none;
+            border-radius: 20px;
+            font-size: 1.3rem;
+            font-weight: 800;
+            cursor: pointer;
+            transition: 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        #yes-btn { background-color: #4CAF50; color: white; }
+        #no-btn { background-color: var(--deep-pink); color: white; }
+
+        .hidden { display: none !important; }
+
+        /* Final Screen */
+        .us-photo { width: 100%; border-radius: 20px; border: 6px solid var(--main-pink); margin: 20px 0; }
+        .love-note { 
+            background: #fff0f3; 
+            padding: 20px; 
+            border-radius: 15px; 
+            color: #880d1e; 
+            line-height: 1.6;
+            font-size: 1rem;
+        }
+        
+        .ring-pop { font-size: 110px; animation: ringPop 1s ease-out; }
+        @keyframes ringPop {
+            0% { transform: scale(0); }
+            70% { transform: scale(1.3); }
+            100% { transform: scale(1); }
+        }
+
+        /* Floating Hearts Animation */
+        .heart {
+            position: absolute;
+            color: #ff4d6d;
+            font-size: 20px;
+            pointer-events: none;
+            animation: fall 3s linear forwards;
+        }
+        @keyframes fall {
+            to { transform: translateY(100vh) rotate(360deg); opacity: 0; }
+        }
+    </style>
+</head>
+<body>
+
+    <audio id="crying-audio">
+        <source src="https://www.soundjay.com/human/baby-crying-01.mp3" type="audio/mpeg">
+    </audio>
+
+    <div id="card">
+        <div id="ask">
+            <div class="emoji-stage" id="icon">😇</div>
+            <h1>Hey Lizzu!</h1>
+            <p id="compliment">Loading cuteness...</p>
+            <h2 style="color: #333;">Will you be my Valentine? 🌹</h2>
+            <div class="btn-box">
+                <button id="yes-btn" onclick="celebrate()">YES! ❤️</button>
+                <button id="no-btn" onmouseover="dodge()" onclick="cry()">No</button>
+            </div>
+        </div>
+
+        <div id="success" class="hidden">
+            <h1>I Knew It! 🥰</h1>
+            <img src="us.jpg" alt="Us Forever" class="us-photo" onerror="this.src='https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExNHJycGZqdXV6eWVndHozbmI2bm96eXJ2dzR6eXp6eXp6eXp6eXAmZXA9djFfaW50ZXJuYWxfZ2lmX2J5X2lkJmN0PWc/KztT2c4u8mYYUiMKdJ/giphy.gif'">
+            <div class="love-note">
+                "My dearest Lizzu, you are the most beautiful part of my life. 
+                I promise to keep you smiling every single day. 
+                I love you so much!"
+            </div>
+            <div class="ring-pop">💍</div>
+            <p style="font-weight: bold; color: var(--deep-pink);">A diamond for my girl!</p>
+        </div>
+    </div>
+
+    <script>
+        const texts = [
+            "You're the prettiest girl ever! 😍",
+            "My heart beats for you, Lizzu! 💓",
+            "You make everything better! ✨",
+            "I'm so lucky to have you! 🍀"
+        ];
+        
+        let i = 0;
+        const comp = document.getElementById('compliment');
+        setInterval(() => {
+            if(document.getElementById('success').classList.contains('hidden')) {
+                comp.innerText = texts[i % texts.length];
+                i++;
+            }
+        }, 2500);
+
+        function dodge() {
+            const btn = document.getElementById('no-btn');
+            const x = Math.random() * (window.innerWidth - btn.offsetWidth);
+            const y = Math.random() * (window.innerHeight - btn.offsetHeight);
+            btn.style.position = "fixed";
+            btn.style.left = x + "px";
+            btn.style.top = y + "px";
+        }
+
+        function cry() {
+            document.getElementById('crying-audio').play();
+            document.getElementById('icon').innerText = "😭";
+            document.getElementById('ask').querySelector('h1').innerText = "LIZZU PLEASE!";
+            document.body.style.backgroundColor = "#a2d2ff"; // Sad blue
+            comp.innerText = "Don't make me cry! Click YES! 🥺";
+            
+            const yes = document.getElementById('yes-btn');
+            let size = parseFloat(window.getComputedStyle(yes).fontSize);
+            yes.style.fontSize = (size + 10) + "px";
+            yes.style.padding = "30px 60px";
+        }
+
+        function celebrate() {
+            document.getElementById('ask').classList.add('hidden');
+            document.getElementById('success').classList.remove('hidden');
+            document.body.style.backgroundColor = "#ff4d6d"; // Deep love red
+            
+            // 1. Confetti
+            confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 } });
+
+            // 2. Heart Rain
+            setInterval(() => {
+                const heart = document.createElement('div');
+                heart.classList.add('heart');
+                heart.innerText = "❤️";
+                heart.style.left = Math.random() * 100 + "vw";
+                heart.style.animationDuration = Math.random() * 2 + 3 + "s";
+                document.body.appendChild(heart);
+                setTimeout(() => heart.remove(), 5000);
+            }, 300);
+        }
+    </script>
+</body>
+</html>
